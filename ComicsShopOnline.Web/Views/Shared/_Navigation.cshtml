@@ -1,0 +1,77 @@
+﻿@using ComicsShopOnline.BusinessLogic.Servieces;
+@using ComicsShopOnline.BusinessLogic.Data;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <!-- Logo -->
+        <a class="navbar-brand" href="#!">Just Comics!</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Menu bar -->
+            <!-- Cart -->
+            @{
+                var count = 0;
+                if (User.Identity.IsAuthenticated)
+                {
+                    var userService = new UserService();
+                    var user = userService.GetUserByUsername(User.Identity.Name);
+                    if (user != null)
+                    {
+                        var db = new AppDbContext();
+                        count = db.CartItems.Count(ci => ci.UserId == user.Id);
+                    }
+                }
+            }
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <form class="d-flex" method="get" action="@Url.Action("Index", "Cart")">
+                    <button class="btn btn-outline-dark position-relative" type="submit">
+                        <i class="bi-cart-fill me-1"></i>
+                        Cart
+                        @if (count > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                @count
+                            </span>
+                        }
+                    </button>
+                </form>
+            }
+
+
+
+
+            <!--Log In-->
+            @if (User.Identity.IsAuthenticated)
+            {
+                <text>
+                    @using (Html.BeginForm("Logout", "Account", FormMethod.Post))
+                    {
+                        <button type="submit" class="btn btn-link">Log out</button>
+                    }
+
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <span class="navbar-text">Hi, @User.Identity.Name!</span>
+                        </li>
+                    </ul>
+                </text>
+            }
+            else
+            {
+                <text>
+                    @using (Html.BeginForm("Login", "Account", FormMethod.Get))
+                    {
+                        <button type="submit" class="btn btn-link">Log in</button>
+                    }
+                </text>
+            }
+        </div>
+    </div>
+</nav>

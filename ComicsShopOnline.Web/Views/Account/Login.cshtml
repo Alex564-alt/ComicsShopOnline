@@ -1,0 +1,30 @@
+﻿@model ComicsShopOnline.Web.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
+        <h2 class="text-center mb-4">Login</h2>
+
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+        {
+            <div class="form-group mb-3">
+                @Html.Label("username", "Username", htmlAttributes: new { @class = "form-label" })
+                @Html.TextBox("username", null, new { @class = "form-control", autocomplete = "off" })
+            </div>
+
+            <div class="form-group mb-3">
+                @Html.Label("password", "Password", htmlAttributes: new { @class = "form-label" })
+                @Html.Password("password", null, new { @class = "form-control", autocomplete = "off" })
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a href="@Url.Action("Register", "Account")" class="btn btn-success">Register</a>
+            </div>
+        }
+    </div>
+</div>
